@@ -3,9 +3,6 @@
 with open('input/d01') as f:
     data = f.read().splitlines()
 
-# Now data is list. LIne per item, empty lines are empty entries :)
-
-elves = []
 sum = 0
 
 for line,val in enumerate(data):
