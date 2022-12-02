@@ -7,14 +7,9 @@ with open('input/d02') as f:
 
 # Now data is list. LIne per item, empty lines are empty entries :)
 
-
-
 # rock = 1
 # paper = 2
 # scissors = 3
-
-
-
 
 # A / X = rock
 # B / Y = paper
@@ -26,10 +21,6 @@ points['Z'] = 3
 
 mywins = [['A','Y'], ['B','Z'], ['C', 'X']]
 nowins = [['A','Z'], ['B','X'], ['C', 'Y']]
-
-
-
-
 
 score = 0
 for d in data:
