@@ -7,3 +7,4 @@
 *.md                 git-encoding=iso8859-1 zos-working-tree-encoding=ibm-1047 linguist-language=markdown
 requirements.txt     git-encoding=iso8859-1 zos-working-tree-encoding=iso8859-1
 *.png                binary
+input/*              git-encoding=iso8859-1 zos-working-tree-encoding=ibm-1047
