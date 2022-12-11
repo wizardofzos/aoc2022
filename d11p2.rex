@@ -1,10 +1,7 @@
 /* REXX */
 x = bpxwunix('cat input/d11',,file.,se.)
 
-digits = 31
-NUMERIC DIGITS digits
 
-part1 = 0
 part2 = 0
 
 monkeyitems. = 0
@@ -50,30 +47,29 @@ do i = 1 to file.0 by 7
   monkeyaction.0 = newmonkey
 end
 
+/* get our common reduce thinggy */
+r = 1
+do rr = 1 to monkeytest.0
+  r = r * monkeytest.rr
+end 
 
+/* need to set numeric digits to length of r * 2 */
+say time()" reduction digits: "length(r)" so setting DIGITS to "length(r)*2
+NUMERIC DIGITS (length(r)*2) 
+
+
+say time()" monkey business started"
 maxlen = 0
 /* So the game begins... */
 do round = 1 to 10000
-  if round // 10 = 0 then
-    say time()" round "round "(DIGITS="DIGITS")"
+  if round // 1000 = 0 then
+    say time()" round "round" ("actions()" acts of monkey business)"
   do i = 1 to monkeyitems.0
     do j = 1 to words(monkeyitems.i)
       old = word(monkeyitems.i, j)
       monkeyinspects.i = monkeyinspects.i + 1   
       interpret(monkeyoperation.i)
-      /*
-      new = trunc(new / 3)  
-      */
-      if length(new) > maxlen then do
-        maxlen = length(new)
-        if maxlen > DIGITS then NUMERIC DIGITS maxlen + 20
-      end
-
-     
       divable = divisible(new,monkeytest.i)
-
-    
-
       if divable = "yes" then
         to = word(monkeyaction.i,1) 
       else
@@ -81,7 +77,7 @@ do round = 1 to 10000
       /* actually throw the item */
       to = to + 1 /* as we don't start at 0 in our stem */
       /* reduce this mofo by mod prod all divisors */
-      new = new // (23*19*13*17*3*5*7*11*2)
+      new = new // r
       monkeyitems.to = monkeyitems.to || " " || new
     end
     monkeyitems.i = ""
@@ -91,7 +87,7 @@ end
 
 tosort = ""
 do i = 1 to monkeyitems.0
-  say "Monkey "i-1" : "monkeyinspects.i
+  /* say "Monkey "i-1" : "monkeyinspects.i */
   tosort = tosort || " " || monkeyinspects.i 
 end
 /* Get our sort trick from day one ;) */
@@ -103,51 +99,15 @@ say "Part two: "part2
 
 exit
 
-reduce: procedure
-  arg int, value
-  damax = 21
-  if length(int) > damax then do 
-    if value = 23 then do
-      do while length(int) > damax
-        lastdigit = substr(int,length(int))
-        rest      = substr(int,1,length(int)-1)
-        int       = (7 * lastdigit ) + rest
-      end
-    end
-
-    if value = 19 then do
-      do while length(int) > damax
-        lastdigit = substr(int,length(int))
-        rest      = substr(int,1,length(int)-1)
-        int       = (2 * lastdigit ) + rest      
-      end
-    end
-
-    if value = 13 then do
-      do while length(int) > damax
-        lastdigit = substr(int,length(int))
-        rest      = substr(int,1,length(int)-1)
-        int       = (4 * lastdigit ) + rest      
-      end
-    end
-
-    if value = 17 then do
-      do while length(int) > damax
-        lastdigit = substr(int,length(int))
-        rest      = substr(int,1,length(int)-1)
-        int       = rest - (5 * lastdigit )
-      end
-    end
-
+actions:
+  res = 0
+  do aa = 1 to monkeyitems.0
+    res = res + monkeyinspects.aa
   end
-  
-  return int
+  return res
 
 divisible: procedure
   arg int, value
-  
-  int = reduce(int,value)
-
   c = int // value
   if c = 0 then return "yes"
   else return "no"
