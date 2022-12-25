@@ -2,7 +2,7 @@
 
 x = bpxwunix('cat input/d21',,f.,se.)
 
-NUMERIC DIGITS 1001
+NUMERIC DIGITS 10000
 
 msay. = '?'
 mdo. = '?'
