@@ -63,81 +63,79 @@ solve: procedure expose mdo. msay.
    
   if msay.m /= '?' then do
     say n" return for" m "-->" msay.m
-
     return msay.m
   end
-  else do
-    say nest"    Dunno this " m "Monkey....yet...."
-    parse var mdo.m arg1 op arg2
-    say mdo.m "parsed as arg1="arg1", arg2="arg2", op="op
 
-    say nest" checking" msay.arg1 "("arg1")" op msay.arg2 "("arg2")"
+  parse var mdo.m arg1 op arg2
+  say mdo.m "parsed as arg1="arg1", arg2="arg2", op="op
 
-
-    select 
-      when msay.arg1 /= '?' & msay.arg2 /= '?' then do
-        say m"   --> pairs known" msay.arg1 op msay.arg2
-        val = notinterpret(msay.arg1, op, msay.arg2)
-        msay.m = val
-         say nest" Returning from call --> "val
-        return val
-      end
-
-      when msay.arg1 = '?' & msay.arg2 /= '?' then do
-        say nest" ARG1 unknown, solving it"
-        s1 = solve(arg1)
-        msay.arg1 = s1
-        say nest "ARG1 unknown, but solved as" s1
-        val = notinterpret(s1,op,msay.arg2)
-        msay.m = val
-        return val
+  say nest" checking" msay.arg1 "("arg1")" op msay.arg2 "("arg2")"
 
 
+  select 
+    when msay.arg1 /= '?' & msay.arg2 /= '?' then do
+      say m"   --> pairs known" msay.arg1 op msay.arg2
+      val = notinterpret(msay.arg1, op, msay.arg2)
+      msay.m = val
+        say nest" Returning from call --> "val
+      return val
+    end
 
-      end
+    when msay.arg1 = '?' & msay.arg2 /= '?' then do
+      say nest" ARG1 unknown, solving it"
+      s1 = solve(arg1)
+      msay.arg1 = s1
+      say nest "ARG1 unknown, but solved as" s1
+      val = notinterpret(s1,op,msay.arg2)
+      msay.m = val
+      return val
+
+
+
+    end
+    
+    when msay.arg1 /= '?' & msay.arg2 = '?' then do
+      say nest "ARG2 unknown, solving it"
+      s2 = solve(arg2,n)
+      msay.arg2 = s2
+      say nest "ARG2 unknown, but solved as" s2
+      val = notinterpret(s2,op,msay.arg1)
+      return val
+    end
+
+    when msay.arg1 = '?' & msay.arg2 = '?' then do
+      say nest " *********  Otherwisey..."arg1 arg2
       
-      when msay.arg1 /= '?' & msay.arg2 = '?' then do
-       say nest "ARG2 unknown, solving it"
-       s2 = solve(arg2,n)
-       msay.arg2 = s2
-       say nest "ARG2 unknown, but solved as" s2
-       val = notinterpret(s2,op,msay.arg1)
-       return val
-      end
-
-      when msay.arg1 = '?' & msay.arg2 = '?' then do
-       say nest " *********  Otherwisey..."arg1 arg2
-       
 
 
-       parse var mdo.arg2 arg2var1 op2 arg2var2
-       val1 = solve(arg2var1,n)
-       say nest"***** arg2 ok" val1
-       val2 = solve(arg2var2,n)
-       say nest " *********  solved" val1 val2
-       say nest " -=-=-=-=-" val1 op  val2  "22222222222222222 INTERPRETP"
-       msay.arg2 = notinterpret(val1,op2,val2)
+      parse var mdo.arg2 arg2var1 op2 arg2var2
+      val1 = solve(arg2var1,n)
+      say nest"***** arg2 ok" val1
+      val2 = solve(arg2var2,n)
+      say nest " *********  solved" val1 val2
+      say nest " -=-=-=-=-" val1 op  val2  "22222222222222222 INTERPRETP"
+      msay.arg2 = notinterpret(val1,op2,val2)
 
-       parse var mdo.arg1 arg1var1 op1 arg1var2
-       say mdo.arg1 arg1var1 op1 arg1var2
-       val1 = solve(arg1var1)
-       say nest "***** arg1 ok" val1
-       val2 = solve(arg1var2)
-       say nest " *********  solved" val1 val2
-       say nest " -=-=-=-=-" val1 op  val2  "11111111111111111 INTERPRETP"
-       msay.arg1 = notinterpret(val1,op1,val2)
+      parse var mdo.arg1 arg1var1 op1 arg1var2
+      say mdo.arg1 arg1var1 op1 arg1var2
+      val1 = solve(arg1var1)
+      say nest "***** arg1 ok" val1
+      val2 = solve(arg1var2)
+      say nest " *********  solved" val1 val2
+      say nest " -=-=-=-=-" val1 op  val2  "11111111111111111 INTERPRETP"
+      msay.arg1 = notinterpret(val1,op1,val2)
 
-       return notinterpret(msay.arg1,op,msay.arg2)
-       
+      return notinterpret(msay.arg1,op,msay.arg2)
       
-       
-      end
+    
+      
+    end
 
-      otherwise do
-        say "udderijs"
-      end
+    otherwise do
+      say "udderijs"
     end
   end
+
   return '?'
      
      
