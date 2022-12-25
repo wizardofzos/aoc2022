@@ -88,7 +88,7 @@ solve: procedure expose mdo. msay.
         s1 = solve(arg1)
         msay.arg1 = s1
         say nest "ARG1 unknown, but solved as" s1
-        val = notinterpret(s1,op,solve(arg2))
+        val = notinterpret(s1,op,msay.arg2)
         msay.m = val
         return val
 
@@ -101,7 +101,7 @@ solve: procedure expose mdo. msay.
        s2 = solve(arg2,n)
        msay.arg2 = s2
        say nest "ARG2 unknown, but solved as" s2
-       val = notinterpret(s2,op,solve(arg1))
+       val = notinterpret(s2,op,msay.arg1)
        return val
       end
 
@@ -128,7 +128,6 @@ solve: procedure expose mdo. msay.
        msay.arg1 = notinterpret(val1,op1,val2)
 
        return notinterpret(msay.arg1,op,msay.arg2)
-       return solve(m,n)
        
       
        
