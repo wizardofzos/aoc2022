@@ -9,6 +9,9 @@ NUMERIC DIGITS 15
 msay. = '?'
 mdo. = '?'
 
+monkeys. = ''
+monkeys.0 = f.0
+
 do i = 1 to f.0
   /* we get a list of monkey-say, monkey-do
   aaaa = x (monkey say)
@@ -16,7 +19,7 @@ do i = 1 to f.0
   
   */
   parse var f.i monkey":" does
-  
+  monkeys.i = monkey
   if monkey = 'humn' then do
     /* we get the human :)*/
     humanstring = does
@@ -44,8 +47,43 @@ end
 
 drop f.
 
+savemystems = copystems('save')
+
+
 root = solve('root')
 say "root" root
+
+m = 'root'
+equalcheck = mdo.m
+parse var equalcheck left op right
+
+say "left ("left") should be equal to right("right")"
+
+say "left="solve(left)
+say "right="solve(right)
+
+same = solve(right)
+/* previous pain learned me only left side alters wwhen humn doees */
+/* also used the overshoot' to run the iterator in largte steps
+   and then restart from before overshoot with slower step... */
+
+do h = 3509819803000 to 3600000000000 by 1
+  restoremystems = copystems('restore')
+  change = 'humn'
+  msay.change = h
+  try = solve(left)
+  if try = same then do
+    say "We done did it....humn="h 
+    exit
+  end
+  if try < same then do
+    say "overshot at "h
+    exit 
+  end
+  
+  if h // 10 = 0 then say time() h "tries already" try same
+end
+
 exit
 
 do while root = '?'
@@ -137,14 +175,26 @@ solve: procedure expose mdo. msay.
     if b = '-' then res =  a - c
     if b = '/' then res =  a / c
     if b = '*' then res =  a * c
-    
-    if b = '/' then do
-      say a b c "=" res
-    end
+
     
     
     return res
     return "BAD"
+
+  copystems: procedure expose mdo. msay. olddo. oldsay. monkeys.
+    parse arg action
+    do i = 1 to monkeys.0
+      mname = monkeys.i
+      if action = 'save' then do
+        olddo.mname = mdo.mname
+        oldsay.mname = msay.mname
+      end
+      else do
+        mdo.mname = olddo.mname
+        msay.mname = oldsay.mname
+      end
+    end 
+    return "OK"
 
 
 
